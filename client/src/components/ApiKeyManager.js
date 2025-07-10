@@ -1,22 +1,35 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FiKey, FiExternalLink, FiChevronDown, FiChevronUp, FiCheck } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 
 const ApiKeyManager = ({ apiKey, onApiKeyChange }) => {
     const [inputKey, setInputKey] = useState('');
     const [isExpanded, setIsExpanded] = useState(!apiKey); // Auto-collapse if API key exists
+    const [isUserTyping, setIsUserTyping] = useState(false);
+    const typingTimeoutRef = useRef(null);
 
     useEffect(() => {
-        // Only update inputKey if apiKey changes and is different from current inputKey
-        setInputKey(apiKey || '');
+        // Only update inputKey if apiKey changes and user is not actively typing
+        if (!isUserTyping) {
+            setInputKey(apiKey || '');
+        }
         
         // Auto-collapse when API key is set
         if (apiKey && apiKey.trim() !== '') {
             setIsExpanded(false);
-        } else {
+        } else if (!isUserTyping) {
             setIsExpanded(true);
         }
-    }, [apiKey]); // Only depend on apiKey to avoid infinite loops
+    }, [apiKey, isUserTyping]); // Depend on both apiKey and isUserTyping
+
+    // Cleanup timeout on unmount
+    useEffect(() => {
+        return () => {
+            if (typingTimeoutRef.current) {
+                clearTimeout(typingTimeoutRef.current);
+            }
+        };
+    }, []);
 
     const handleSave = (e) => {
         e.preventDefault(); // Prevent form submission
@@ -42,6 +55,11 @@ const ApiKeyManager = ({ apiKey, onApiKeyChange }) => {
                 const savedKey = localStorage.getItem('openrouter_api_key');
                 if (savedKey === trimmedKey) {
                     onApiKeyChange(trimmedKey);
+                    // Clear timeout and reset typing flag after successful save
+                    if (typingTimeoutRef.current) {
+                        clearTimeout(typingTimeoutRef.current);
+                    }
+                    setIsUserTyping(false);
                     toast.success('API key saved successfully!');
                     // Auto-collapse after saving
                     setTimeout(() => setIsExpanded(false), 1000);
@@ -65,6 +83,11 @@ const ApiKeyManager = ({ apiKey, onApiKeyChange }) => {
                 localStorage.removeItem('openrouter_api_key');
                 setInputKey('');
                 onApiKeyChange('');
+                // Clear timeout and reset typing flag after clearing
+                if (typingTimeoutRef.current) {
+                    clearTimeout(typingTimeoutRef.current);
+                }
+                setIsUserTyping(false);
                 setIsExpanded(true); // Expand when cleared so user can enter new key
                 toast.success('API key cleared');
             } else {
@@ -78,6 +101,17 @@ const ApiKeyManager = ({ apiKey, onApiKeyChange }) => {
 
     const handleInputChange = (e) => {
         setInputKey(e.target.value);
+        setIsUserTyping(true);
+        
+        // Clear any existing timeout
+        if (typingTimeoutRef.current) {
+            clearTimeout(typingTimeoutRef.current);
+        }
+        
+        // Set a new timeout to clear the typing flag
+        typingTimeoutRef.current = setTimeout(() => {
+            setIsUserTyping(false);
+        }, 1000);
     };
 
     return (
