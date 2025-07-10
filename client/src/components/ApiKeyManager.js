@@ -7,10 +7,8 @@ const ApiKeyManager = ({ apiKey, onApiKeyChange }) => {
     const [isExpanded, setIsExpanded] = useState(!apiKey); // Auto-collapse if API key exists
 
     useEffect(() => {
-        // Only update inputKey if it's different from current value to prevent clearing
-        if (inputKey !== (apiKey || '')) {
-            setInputKey(apiKey || '');
-        }
+        // Only update inputKey if apiKey changes and is different from current inputKey
+        setInputKey(apiKey || '');
         
         // Auto-collapse when API key is set
         if (apiKey && apiKey.trim() !== '') {
@@ -18,7 +16,7 @@ const ApiKeyManager = ({ apiKey, onApiKeyChange }) => {
         } else {
             setIsExpanded(true);
         }
-    }, [apiKey]); // Only depend on apiKey prop
+    }, [apiKey]); // Only depend on apiKey to avoid infinite loops
 
     const handleSave = (e) => {
         e.preventDefault(); // Prevent form submission
