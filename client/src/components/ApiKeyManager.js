@@ -16,7 +16,7 @@ const ApiKeyManager = ({ apiKey, onApiKeyChange }) => {
         if (apiKey && apiKey.trim() !== '') {
             setIsExpanded(false);
         }
-    }, [apiKey]);
+    }, [apiKey, inputKey]); // Added inputKey to the dependency array
 
     const handleSave = (e) => {
         e.preventDefault(); // Prevent form submission
