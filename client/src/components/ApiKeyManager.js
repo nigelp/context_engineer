@@ -7,14 +7,20 @@ const ApiKeyManager = ({ apiKey, onApiKeyChange }) => {
     const [isExpanded, setIsExpanded] = useState(!apiKey); // Auto-collapse if API key exists
 
     useEffect(() => {
-        setInputKey(apiKey || '');
+        // Only update inputKey if apiKey changes and is different from current inputKey
+        if (apiKey !== inputKey && apiKey !== undefined) {
+            setInputKey(apiKey || '');
+        }
+        
         // Auto-collapse when API key is set
-        if (apiKey && !inputKey) {
+        if (apiKey && apiKey.trim() !== '') {
             setIsExpanded(false);
         }
-    }, [apiKey, inputKey]);
+    }, [apiKey]);
 
-    const handleSave = () => {
+    const handleSave = (e) => {
+        e.preventDefault(); // Prevent form submission
+        
         if (!inputKey.trim()) {
             toast.error('Please enter an API key');
             return;
@@ -25,14 +31,16 @@ const ApiKeyManager = ({ apiKey, onApiKeyChange }) => {
             return;
         }
 
-        localStorage.setItem('openrouter_api_key', inputKey.trim());
-        onApiKeyChange(inputKey.trim());
+        const trimmedKey = inputKey.trim();
+        localStorage.setItem('openrouter_api_key', trimmedKey);
+        onApiKeyChange(trimmedKey);
         toast.success('API key saved successfully!');
         // Auto-collapse after saving
         setTimeout(() => setIsExpanded(false), 1000);
     };
 
-    const handleClear = () => {
+    const handleClear = (e) => {
+        e.preventDefault(); // Prevent form submission
         localStorage.removeItem('openrouter_api_key');
         setInputKey('');
         onApiKeyChange('');
@@ -40,10 +48,15 @@ const ApiKeyManager = ({ apiKey, onApiKeyChange }) => {
         toast.success('API key cleared');
     };
 
+    const handleInputChange = (e) => {
+        setInputKey(e.target.value);
+    };
+
     return (
         <div className="bg-white dark:bg-slate-800/50 rounded-lg shadow mb-6">
             {/* Collapsible Header */}
             <button
+                type="button"
                 onClick={() => setIsExpanded(!isExpanded)}
                 className="w-full p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-slate-700/30 transition-colors rounded-lg"
             >
@@ -79,17 +92,17 @@ const ApiKeyManager = ({ apiKey, onApiKeyChange }) => {
                         Your API key is stored locally in your browser and never sent to our servers.
                     </p>
 
-                    <div className="flex gap-2">
+                    <form onSubmit={handleSave} className="flex gap-2">
                         <input
                             type="password"
                             value={inputKey}
-                            onChange={(e) => setInputKey(e.target.value)}
+                            onChange={handleInputChange}
                             placeholder="sk-or-v1-..."
                             className="flex-1 p-3 rounded-lg bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-accent-aqua focus:outline-none transition-all font-mono text-sm"
                         />
                         
                         <button
-                            onClick={handleSave}
+                            type="submit"
                             className="px-4 py-3 bg-accent-aqua hover:bg-accent-aqua/80 text-white rounded-lg transition-colors font-medium"
                         >
                             Save
@@ -97,13 +110,14 @@ const ApiKeyManager = ({ apiKey, onApiKeyChange }) => {
                         
                         {apiKey && (
                             <button
+                                type="button"
                                 onClick={handleClear}
                                 className="px-4 py-3 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors"
                             >
                                 Clear
                             </button>
                         )}
-                    </div>
+                    </form>
 
                     {!apiKey && (
                         <div className="mt-3 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg">
