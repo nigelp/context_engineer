@@ -1,0 +1,22 @@
+{
+  "name": "context-engineer",
+  "version": "1.0.0",
+  "description": "AI Context Engineering Tool - Full Stack Application",
+  "scripts": {
+    "start": "cd client && npm start",
+    "build": "cd client && npm run build"
+  },
+  "keywords": [
+    "ai",
+    "context-engineering",
+    "prompt-engineering",
+    "react",
+    "openrouter"
+  ],
+  "author": "Context Engineer Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https.github.com/nigelp/context_engineer.git"
+  }
+}

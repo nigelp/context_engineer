@@ -1,0 +1,187 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Dark Slate-Blue Theme with Aqua Accents */
+:root {
+  --color-slate-light: #f1f5f9;
+  --color-slate-dark: #0f172a;
+  --color-slate-blue: #1e293b;
+  --color-slate-blue-light: #334155;
+  --color-slate-blue-lighter: #475569;
+  --color-accent-aqua: #00d4ff;
+  --color-accent-aqua-dark: #0ea5e9;
+  --color-text-light: #f8fafc;
+  --color-text-muted: #cbd5e1;
+}
+
+/* Global Dark Theme Override */
+.dark {
+  background-color: var(--color-slate-dark) !important;
+  color: var(--color-text-light) !important;
+}
+
+/* Background Classes */
+.bg-slate-50 {
+  background-color: var(--color-slate-light);
+}
+
+.dark .bg-slate-900 {
+  background-color: var(--color-slate-dark) !important;
+}
+
+/* Accent Colors */
+.text-accent-aqua {
+  color: var(--color-accent-aqua) !important;
+}
+
+.bg-accent-aqua {
+  background-color: var(--color-accent-aqua) !important;
+}
+
+.hover\:bg-accent-aqua\/80:hover {
+  background-color: rgba(0, 212, 255, 0.8) !important;
+}
+
+.from-accent-aqua {
+  --tw-gradient-from: var(--color-accent-aqua);
+  --tw-gradient-to: rgb(0 212 255 / 0);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.focus\:ring-accent-aqua:focus {
+  --tw-ring-color: var(--color-accent-aqua) !important;
+}
+
+/* Header Styling */
+.dark .bg-slate-light\/80 {
+  background-color: rgba(15, 23, 42, 0.95) !important;
+  backdrop-filter: blur(12px);
+}
+
+/* Card and Component Backgrounds */
+.dark .bg-white {
+  background-color: var(--color-slate-blue) !important;
+  color: var(--color-text-light) !important;
+  border: 1px solid var(--color-slate-blue-lighter);
+}
+
+.dark .bg-slate-800\/50 {
+  background-color: var(--color-slate-blue) !important;
+  color: var(--color-text-light) !important;
+  border: 1px solid var(--color-slate-blue-lighter);
+}
+
+/* Input Fields */
+.dark .bg-gray-100 {
+  background-color: var(--color-slate-blue-light) !important;
+  color: var(--color-text-light) !important;
+}
+
+.dark .bg-gray-700 {
+  background-color: var(--color-slate-blue-light) !important;
+  color: var(--color-text-light) !important;
+}
+
+.dark .bg-gray-900 {
+  background-color: var(--color-slate-dark) !important;
+  color: var(--color-text-light) !important;
+}
+
+/* Text Colors */
+.dark .text-slate-100 {
+  color: var(--color-text-light) !important;
+}
+
+.dark .text-gray-200 {
+  color: var(--color-text-light) !important;
+}
+
+.dark .text-gray-600 {
+  color: var(--color-text-muted) !important;
+}
+
+.dark .text-gray-400 {
+  color: var(--color-text-muted) !important;
+}
+
+.dark .text-gray-500 {
+  color: var(--color-text-muted) !important;
+}
+
+.dark .text-gray-800 {
+  color: var(--color-text-light) !important;
+}
+
+/* Border Colors */
+.dark .border-gray-300 {
+  border-color: var(--color-slate-blue-lighter) !important;
+}
+
+.dark .border-gray-600 {
+  border-color: var(--color-slate-blue-lighter) !important;
+}
+
+/* Button States */
+.dark .bg-gray-200 {
+  background-color: var(--color-slate-blue-lighter) !important;
+  color: var(--color-text-light) !important;
+}
+
+.dark .hover\:bg-gray-200:hover {
+  background-color: var(--color-slate-blue-light) !important;
+}
+
+.dark .hover\:bg-gray-300:hover {
+  background-color: var(--color-slate-blue-light) !important;
+}
+
+.dark .hover\:bg-gray-600:hover {
+  background-color: var(--color-slate-blue-lighter) !important;
+}
+
+.dark .hover\:bg-gray-700:hover {
+  background-color: var(--color-slate-blue) !important;
+}
+
+/* Form Elements */
+.dark input,
+.dark textarea,
+.dark select {
+  background-color: var(--color-slate-blue-light) !important;
+  border-color: var(--color-slate-blue-lighter) !important;
+  color: var(--color-text-light) !important;
+}
+
+.dark input:focus,
+.dark textarea:focus,
+.dark select:focus {
+  border-color: var(--color-accent-aqua) !important;
+  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1) !important;
+  --tw-ring-color: var(--color-accent-aqua) !important;
+}
+
+/* Aqua Accent Buttons and Links */
+.dark .text-accent-aqua {
+  color: var(--color-accent-aqua) !important;
+}
+
+.dark .hover\:text-accent-aqua\/80:hover {
+  color: rgba(0, 212, 255, 0.8) !important;
+}
+
+/* Red accent for delete buttons */
+.dark .text-red-500 {
+  color: #ef4444 !important;
+}
+
+.dark .hover\:text-red-700:hover {
+  color: #dc2626 !important;
+}
+
+/* Pre and Code blocks */
+.dark pre {
+  background-color: var(--color-slate-dark) !important;
+  color: var(--color-text-light) !important;
+  border-color: var(--color-slate-blue-lighter) !important;
+}
