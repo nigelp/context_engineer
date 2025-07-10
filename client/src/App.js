@@ -309,10 +309,8 @@ function App() {
        </div>
      </footer>
      
-     {/* Debug Panel - only show in production or when debugging */}
-     {(process.env.NODE_ENV === 'production' || window.location.search.includes('debug=true')) && (
-       <ApiKeyDebugPanel />
-     )}
+     {/* Debug Panel - always available for debugging API key issues */}
+     <ApiKeyDebugPanel />
    </div>
   );
 }

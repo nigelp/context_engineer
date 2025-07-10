@@ -83,13 +83,18 @@ const ApiKeyDebugPanel = () => {
 
     if (!isVisible) {
         return (
-            <button
-                onClick={() => setIsVisible(true)}
-                className="fixed bottom-4 right-4 p-2 bg-gray-800 text-white rounded-full shadow-lg hover:bg-gray-700 z-50"
-                title="Show Debug Panel (Ctrl+Shift+D)"
-            >
-                <FiSettings size={20} />
-            </button>
+            <>
+                <button
+                    onClick={() => setIsVisible(true)}
+                    className="fixed bottom-4 right-4 p-3 bg-red-600 text-white rounded-full shadow-lg hover:bg-red-700 z-50 animate-pulse"
+                    title="Show API Key Debug Panel"
+                >
+                    <FiSettings size={24} />
+                </button>
+                <div className="fixed bottom-20 right-4 bg-red-600 text-white px-3 py-1 rounded-lg shadow-lg text-sm z-50">
+                    Debug API Key Issues
+                </div>
+            </>
         );
     }
 
