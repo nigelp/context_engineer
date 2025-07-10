@@ -7,8 +7,10 @@ const ApiKeyManager = ({ apiKey, onApiKeyChange }) => {
     const [isExpanded, setIsExpanded] = useState(!apiKey); // Auto-collapse if API key exists
 
     useEffect(() => {
-        // Initialize inputKey when component mounts or apiKey prop changes
-        setInputKey(apiKey || '');
+        // Only update inputKey if it's different from current value to prevent clearing
+        if (inputKey !== (apiKey || '')) {
+            setInputKey(apiKey || '');
+        }
         
         // Auto-collapse when API key is set
         if (apiKey && apiKey.trim() !== '') {
@@ -32,20 +34,48 @@ const ApiKeyManager = ({ apiKey, onApiKeyChange }) => {
         }
 
         const trimmedKey = inputKey.trim();
-        localStorage.setItem('openrouter_api_key', trimmedKey);
-        onApiKeyChange(trimmedKey);
-        toast.success('API key saved successfully!');
-        // Auto-collapse after saving
-        setTimeout(() => setIsExpanded(false), 1000);
+        
+        try {
+            // Verify localStorage is available
+            if (typeof Storage !== "undefined" && localStorage) {
+                localStorage.setItem('openrouter_api_key', trimmedKey);
+                
+                // Verify the key was actually saved
+                const savedKey = localStorage.getItem('openrouter_api_key');
+                if (savedKey === trimmedKey) {
+                    onApiKeyChange(trimmedKey);
+                    toast.success('API key saved successfully!');
+                    // Auto-collapse after saving
+                    setTimeout(() => setIsExpanded(false), 1000);
+                } else {
+                    throw new Error('Failed to verify saved key');
+                }
+            } else {
+                throw new Error('localStorage not available');
+            }
+        } catch (error) {
+            console.error('Error saving API key:', error);
+            toast.error('Failed to save API key. Please try again.');
+        }
     };
 
     const handleClear = (e) => {
         e.preventDefault(); // Prevent form submission
-        localStorage.removeItem('openrouter_api_key');
-        setInputKey('');
-        onApiKeyChange('');
-        setIsExpanded(true); // Expand when cleared so user can enter new key
-        toast.success('API key cleared');
+        
+        try {
+            if (typeof Storage !== "undefined" && localStorage) {
+                localStorage.removeItem('openrouter_api_key');
+                setInputKey('');
+                onApiKeyChange('');
+                setIsExpanded(true); // Expand when cleared so user can enter new key
+                toast.success('API key cleared');
+            } else {
+                throw new Error('localStorage not available');
+            }
+        } catch (error) {
+            console.error('Error clearing API key:', error);
+            toast.error('Failed to clear API key');
+        }
     };
 
     const handleInputChange = (e) => {

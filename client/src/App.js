@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
 import toast from 'react-hot-toast';
@@ -24,12 +23,29 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [response, setResponse] = useState(null);
 
-  // Load API key from localStorage on app start
+  // Load API key from localStorage on app start with error handling
   useEffect(() => {
-    const savedApiKey = localStorage.getItem('openrouter_api_key');
-    if (savedApiKey) {
-      setApiKey(savedApiKey);
-    }
+    const loadApiKey = () => {
+      try {
+        if (typeof Storage !== "undefined" && localStorage) {
+          const savedApiKey = localStorage.getItem('openrouter_api_key');
+          if (savedApiKey && savedApiKey.trim()) {
+            setApiKey(savedApiKey.trim());
+          }
+        }
+      } catch (error) {
+        console.error('Error loading API key from localStorage:', error);
+        // Don't show error toast on initial load, just log it
+      }
+    };
+
+    // Load immediately
+    loadApiKey();
+    
+    // Also try loading after a short delay in case localStorage isn't immediately available
+    const timeoutId = setTimeout(loadApiKey, 100);
+    
+    return () => clearTimeout(timeoutId);
   }, []);
 
   const toggleTheme = () => {
