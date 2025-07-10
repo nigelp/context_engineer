@@ -7,6 +7,7 @@ import ContextBuilder from './components/ContextBuilder';
 import LivePreview from './components/LivePreview';
 import ModelSelector from './components/ModelSelector';
 import ApiKeyManager from './components/ApiKeyManager';
+import ApiKeyDebugPanel from './components/ApiKeyDebugPanel';
 
 function App() {
   const [theme, setTheme] = useState('dark');
@@ -23,29 +24,66 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [response, setResponse] = useState(null);
 
-  // Load API key from localStorage on app start with error handling
+  // Load API key from storage on app start with fallback mechanism
   useEffect(() => {
     const loadApiKey = () => {
       try {
+        // Try localStorage first
         if (typeof Storage !== "undefined" && localStorage) {
           const savedApiKey = localStorage.getItem('openrouter_api_key');
           if (savedApiKey && savedApiKey.trim()) {
+            console.log('[App] Loaded API key from localStorage');
             setApiKey(savedApiKey.trim());
+            return;
           }
         }
       } catch (error) {
-        console.error('Error loading API key from localStorage:', error);
-        // Don't show error toast on initial load, just log it
+        console.log('[App] localStorage failed:', error.message);
+      }
+
+      try {
+        // Try sessionStorage
+        if (typeof Storage !== "undefined" && sessionStorage) {
+          const savedApiKey = sessionStorage.getItem('openrouter_api_key');
+          if (savedApiKey && savedApiKey.trim()) {
+            console.log('[App] Loaded API key from sessionStorage');
+            setApiKey(savedApiKey.trim());
+            return;
+          }
+        }
+      } catch (error) {
+        console.log('[App] sessionStorage failed:', error.message);
+      }
+
+      try {
+        // Try cookies
+        const match = document.cookie.match(new RegExp(`(^| )openrouter_api_key=([^;]+)`));
+        if (match) {
+          const savedApiKey = decodeURIComponent(match[2]);
+          if (savedApiKey && savedApiKey.trim()) {
+            console.log('[App] Loaded API key from cookie');
+            setApiKey(savedApiKey.trim());
+            return;
+          }
+        }
+      } catch (error) {
+        console.log('[App] Cookie read failed:', error.message);
       }
     };
 
     // Load immediately
     loadApiKey();
     
-    // Also try loading after a short delay in case localStorage isn't immediately available
+    // Also try loading after a short delay in case storage isn't immediately available
     const timeoutId = setTimeout(loadApiKey, 100);
     
-    return () => clearTimeout(timeoutId);
+    // And try again after a longer delay for extra safety
+    const longerTimeoutId = setTimeout(loadApiKey, 500);
+    
+    return () => {
+      clearTimeout(timeoutId);
+      clearTimeout(longerTimeoutId);
+    };
   }, []);
 
   const toggleTheme = () => {
@@ -270,6 +308,11 @@ function App() {
          </div>
        </div>
      </footer>
+     
+     {/* Debug Panel - only show in production or when debugging */}
+     {(process.env.NODE_ENV === 'production' || window.location.search.includes('debug=true')) && (
+       <ApiKeyDebugPanel />
+     )}
    </div>
   );
 }
