@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FiChevronDown, FiStar, FiDollarSign } from 'react-icons/fi';
+import { FiChevronDown, FiStar } from 'react-icons/fi';
 
 const ModelSelector = ({ selectedModel, onModelChange }) => {
     const [isOpen, setIsOpen] = useState(false);
