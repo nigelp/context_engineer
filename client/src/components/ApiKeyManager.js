@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FiKey, FiExternalLink, FiChevronDown, FiChevronUp, FiCheck, FiAlertCircle } from 'react-icons/fi';
+import { FiKey, FiExternalLink, FiChevronDown, FiChevronUp, FiCheck } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import ApiKeyDiagnostics from './ApiKeyDiagnostics';
 
@@ -153,16 +153,16 @@ const ApiKeyManager = ({ apiKey, onApiKeyChange }) => {
                 clearTimeout(typingTimeoutRef.current);
             }
         };
-    }, []);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     // Debug: Log prop changes
     useEffect(() => {
         debugLog('apiKey_prop_changed', { 
             hasApiKey: !!apiKey,
             isUserTyping,
-            inputKeyLength: inputKey.length 
+            inputKeyLength: inputKey.length
         });
-    }, [apiKey]);
+    }, [apiKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         debugLog('effect_running', { 
@@ -188,7 +188,7 @@ const ApiKeyManager = ({ apiKey, onApiKeyChange }) => {
         } else if (!isUserTyping) {
             setIsExpanded(true);
         }
-    }, [apiKey, isUserTyping]);
+    }, [apiKey, isUserTyping]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleSave = (e) => {
         debugLog('handleSave_triggered', { 
