@@ -7,7 +7,6 @@ import ContextBuilder from './components/ContextBuilder';
 import LivePreview from './components/LivePreview';
 import ModelSelector from './components/ModelSelector';
 import ApiKeyManager from './components/ApiKeyManager';
-import ApiKeyDebugPanel from './components/ApiKeyDebugPanel';
 import { storage } from './utils/storage'; // Import storage utility
 
 function App() {
@@ -24,6 +23,21 @@ function App() {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [response, setResponse] = useState(null);
+  // Storage initialization check effect
+  useEffect(() => {
+    try {
+      const testKey = '__storage_test__';
+      storage.setItem(testKey, testKey);
+      if (storage.getItem(testKey) !== testKey) {
+        console.warn('Storage availability test failed. API key might not be saved.');
+        toast.error('Your browser storage seems to be disabled. API key cannot be saved.', { duration: 6000 });
+      }
+      storage.removeItem(testKey);
+    } catch (e) {
+      console.error('Storage initialization check failed:', e);
+      toast.error('Could not access browser storage. API key cannot be saved.', { duration: 6000 });
+    }
+  }, []);
 
   // Load API Key from storage on initial render
   useEffect(() => {
@@ -255,8 +269,6 @@ function App() {
          </div>
        </div>
      </footer>
-     
-     <ApiKeyDebugPanel />
    </div>
   );
 }

@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { FiKey, FiExternalLink, FiChevronDown, FiChevronUp, FiCheck } from 'react-icons/fi';
 import toast from 'react-hot-toast';
-import ApiKeyDiagnostics from './ApiKeyDiagnostics';
 
 const ApiKeyManager = ({ apiKey, onApiKeyChange }) => {
     const [inputKey, setInputKey] = useState(apiKey || '');
     const [isExpanded, setIsExpanded] = useState(!apiKey);
-    const [showDiagnostics, setShowDiagnostics] = useState(false);
 
     useEffect(() => {
         setInputKey(apiKey || '');
@@ -69,11 +67,6 @@ const ApiKeyManager = ({ apiKey, onApiKeyChange }) => {
 
             {isExpanded && (
                 <div className="px-4 pb-4 border-t border-gray-200 dark:border-gray-600">
-                     {showDiagnostics && (
-                        <div className="mt-3">
-                           <ApiKeyDiagnostics />
-                        </div>
-                    )}
                     <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 mt-3">
                         Your API key is stored locally in your browser.
                     </p>
@@ -101,15 +94,6 @@ const ApiKeyManager = ({ apiKey, onApiKeyChange }) => {
                             </button>
                         )}
                     </form>
-                    <div className="mt-3 text-center">
-                        <button
-                            type="button"
-                            onClick={() => setShowDiagnostics(!showDiagnostics)}
-                            className="text-xs text-gray-500 hover:text-gray-700 underline"
-                        >
-                            {showDiagnostics ? 'Hide' : 'Show'} Storage Diagnostics
-                        </button>
-                    </div>
                 </div>
             )}
         </div>
