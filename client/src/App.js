@@ -8,6 +8,7 @@ import LivePreview from './components/LivePreview';
 import ModelSelector from './components/ModelSelector';
 import ApiKeyManager from './components/ApiKeyManager';
 import ApiKeyDebugPanel from './components/ApiKeyDebugPanel';
+import { storage } from './utils/storage'; // Import storage utility
 
 function App() {
   const [theme, setTheme] = useState('dark');
@@ -24,67 +25,22 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [response, setResponse] = useState(null);
 
-  // Load API key from storage on app start with fallback mechanism
+  // Load API Key from storage on initial render
   useEffect(() => {
-    const loadApiKey = () => {
-      try {
-        // Try localStorage first
-        if (typeof Storage !== "undefined" && localStorage) {
-          const savedApiKey = localStorage.getItem('openrouter_api_key');
-          if (savedApiKey && savedApiKey.trim()) {
-            console.log('[App] Loaded API key from localStorage');
-            setApiKey(savedApiKey.trim());
-            return;
-          }
-        }
-      } catch (error) {
-        console.log('[App] localStorage failed:', error.message);
-      }
-
-      try {
-        // Try sessionStorage
-        if (typeof Storage !== "undefined" && sessionStorage) {
-          const savedApiKey = sessionStorage.getItem('openrouter_api_key');
-          if (savedApiKey && savedApiKey.trim()) {
-            console.log('[App] Loaded API key from sessionStorage');
-            setApiKey(savedApiKey.trim());
-            return;
-          }
-        }
-      } catch (error) {
-        console.log('[App] sessionStorage failed:', error.message);
-      }
-
-      try {
-        // Try cookies
-        const match = document.cookie.match(new RegExp(`(^| )openrouter_api_key=([^;]+)`));
-        if (match) {
-          const savedApiKey = decodeURIComponent(match[2]);
-          if (savedApiKey && savedApiKey.trim()) {
-            console.log('[App] Loaded API key from cookie');
-            setApiKey(savedApiKey.trim());
-            return;
-          }
-        }
-      } catch (error) {
-        console.log('[App] Cookie read failed:', error.message);
-      }
-    };
-
-    // Load immediately
-    loadApiKey();
-    
-    // Also try loading after a short delay in case storage isn't immediately available
-    const timeoutId = setTimeout(loadApiKey, 100);
-    
-    // And try again after a longer delay for extra safety
-    const longerTimeoutId = setTimeout(loadApiKey, 500);
-    
-    return () => {
-      clearTimeout(timeoutId);
-      clearTimeout(longerTimeoutId);
-    };
+    const savedApiKey = storage.getItem('openrouter_api_key');
+    if (savedApiKey) {
+      setApiKey(savedApiKey);
+    }
   }, []);
+
+  const handleApiKeyChange = (newApiKey) => {
+    if (newApiKey) {
+      storage.setItem('openrouter_api_key', newApiKey);
+    } else {
+      storage.removeItem('openrouter_api_key');
+    }
+    setApiKey(newApiKey);
+  };
 
   const toggleTheme = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark');
@@ -104,7 +60,6 @@ function App() {
     setIsLoading(true);
     setResponse(null);
 
-    // Assemble the context into a prompt
     const assembleContext = (context) => {
       let assembled = '';
       
@@ -188,7 +143,6 @@ function App() {
     <div className={`${theme} font-sans bg-slate-50 dark:bg-slate-900 text-gray-800 dark:text-slate-100 min-h-screen`}>
       <Toaster position="top-right" />
       
-      {/* Sticky Header */}
       <header className="bg-slate-light/80 dark:bg-slate-dark/80 backdrop-blur-lg shadow-md sticky top-0 z-50">
         <div className="container mx-auto px-4 h-16 flex justify-between items-center">
           <h1 className="text-2xl font-bold bg-gradient-to-r from-accent-aqua to-blue-300 bg-clip-text">
@@ -205,7 +159,6 @@ function App() {
         </div>
       </header>
 
-      {/* Main Content */}
       <main className="container mx-auto p-4 max-w-7xl">
         <div className="mb-6">
           <h2 className="text-xl font-semibold mb-2">Build Your Perfect AI Context</h2>
@@ -214,14 +167,12 @@ function App() {
           </p>
         </div>
 
-        {/* API Key Manager */}
         <ApiKeyManager
           apiKey={apiKey}
-          onApiKeyChange={setApiKey}
+          onApiKeyChange={handleApiKeyChange}
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left Column - Context Builder */}
           <div className="lg:col-span-2 space-y-6">
             <ModelSelector
               selectedModel={selectedModel}
@@ -233,7 +184,6 @@ function App() {
             />
           </div>
 
-          {/* Right Column - Live Preview */}
           <div className="lg:col-span-1">
             <LivePreview
               context={context}
@@ -243,7 +193,6 @@ function App() {
           </div>
         </div>
 
-        {/* Loading State */}
         {isLoading && (
           <div className="mt-6 bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow text-center">
             <FiLoader className="animate-spin mx-auto mb-2" size={24} />
@@ -251,7 +200,6 @@ function App() {
           </div>
         )}
 
-        {/* Response Display */}
         {response && (
           <div className="mt-6 bg-white dark:bg-slate-800/50 p-6 rounded-lg shadow">
             <div className="flex items-center justify-between mb-4">
@@ -285,7 +233,6 @@ function App() {
         )}
      </main>
 
-     {/* Footer - Provides extra scroll space for tooltip visibility */}
      <footer className="bg-slate-800 dark:bg-slate-900 border-t border-slate-700 dark:border-slate-800 mt-12">
        <div className="container mx-auto px-4" style={{ paddingTop: '50px', paddingBottom: '100px' }}>
          <div className="text-center text-slate-400 dark:text-slate-500">
@@ -309,7 +256,6 @@ function App() {
        </div>
      </footer>
      
-     {/* Debug Panel - always available for debugging API key issues */}
      <ApiKeyDebugPanel />
    </div>
   );
