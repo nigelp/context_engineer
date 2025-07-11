@@ -7,6 +7,7 @@ import ContextBuilder from './components/ContextBuilder';
 import LivePreview from './components/LivePreview';
 import ModelSelector from './components/ModelSelector';
 import ApiKeyManager from './components/ApiKeyManager';
+import ExamplePrompts from './components/ExamplePrompts';
 import { storage } from './utils/storage'; // Import storage utility
 
 function App() {
@@ -56,6 +57,18 @@ function App() {
     setApiKey(newApiKey);
   };
 
+  const handlePromptSelect = (prompt) => {
+    setContext({
+      ...context,
+      persona: prompt.persona,
+      initialPrompt: prompt.initialPrompt,
+      backgroundContext: prompt.backgroundContext,
+      examples: prompt.examples,
+      outputFormat: prompt.outputFormat,
+      rules: prompt.rules,
+    });
+  };
+
   const toggleTheme = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark');
   };
@@ -75,6 +88,7 @@ function App() {
     setResponse(null);
 
     const assembleContext = (context) => {
+      
       let assembled = '';
       
       if (context.persona) {
@@ -163,6 +177,7 @@ function App() {
             Context Engineer
           </h1>
           <div className="flex items-center gap-4">
+            <ExamplePrompts onSelect={handlePromptSelect} />
             <button
               onClick={toggleTheme}
               className="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"

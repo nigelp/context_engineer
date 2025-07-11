@@ -6,13 +6,9 @@ A powerful AI context engineering tool that helps you build precise, structured 
 
 ## ✨ Features
 
-- 🎯 **Smart Persona Definition**: Define AI roles with specific expertise levels
-- 📝 **Structured Prompting**: Break down complex requests into clear components
-- 🔍 **Background Context**: Add constraints and environmental factors
-- 💡 **Example-Driven**: Provide input/output examples to guide AI behavior
-- 📐 **Output Formatting**: Specify exact response structure and style
 - 🛡️ **Rule-Based Constraints**: Set boundaries and requirements
 - 🌐 **30+ AI Models**: Anthropic, OpenAI, Google, DeepSeek, Qwen, Meta, Mistral + more
+- ✨ **Example Prompts**: Get started quickly with pre-built prompt templates for various tasks.
 - 🆓 **Free Models**: Mix of premium and free models clearly labeled
 - 🌙 **Dark Theme**: Beautiful dark slate-blue interface with aqua accents
 - ℹ️ **Comprehensive Help**: Detailed hover tooltips with examples and guidance
@@ -59,6 +55,7 @@ This starts:
 
 ## 🎯 How to Use
 
+0. **(Optional) Load an Example**: Choose a pre-built prompt from the "Examples" menu to get started quickly.
 1. **🎭 Define Persona**: Set the AI's role and expertise (hover ℹ️ for examples)
 2. **📝 Write Prompt**: Clearly state your task (hover ℹ️ for guidance)
 3. **🔍 Add Context**: Include constraints and background (hover ℹ️ for tips)
@@ -70,6 +67,25 @@ This starts:
 
 ### 💡 Pro Tip
 Hover over any ℹ️ icon for detailed guidance with examples!
+
+## 💡 Example Prompts
+
+The app now includes a selection of pre-built prompts to help you get started. Find them in the "Examples" dropdown.
+
+### 1. **Technical Article Writer**
+- **Persona**: A senior software engineer writing a technical blog post.
+- **Prompt**: "Explain the concept of monorepos vs. multi-repos."
+- **Result**: A well-structured article with code examples.
+
+### 2. **Creative Story Generator**
+- **Persona**: A fantasy author brainstorming ideas.
+- **Prompt**: "Write a short story about a dragon who is afraid of heights."
+- **Result**: A unique and engaging narrative.
+
+### 3. **API Documentation Assistant**
+- **Persona**: A technical writer creating API documentation.
+- **Prompt**: "Document the `/users/{id}` endpoint, including parameters and responses."
+- **Result**: Clear and concise documentation in Markdown format.
 
 ## 🤖 Supported AI Models
 
