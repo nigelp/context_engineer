@@ -45,17 +45,19 @@ cd context-engineer
 # Install dependencies
 npm run install-all
 
-# Start development servers
-npm run dev
+# Start development server
+npm start
+
+# build
+npm run build
 ```
 
 This starts:
-- Frontend: http://localhost:3000
-- Backend: http://localhost:3001
+- Client: http://localhost:3000
 
 ## 🎯 How to Use
 
-0. **(Optional) Load an Example**: Choose a pre-built prompt from the "Examples" menu to get started quickly.
+0. **(Optional) Load an Example**: Choose a pre-built prompt from the "Examples" menu as a guide to get started quickly.
 1. **🎭 Define Persona**: Set the AI's role and expertise (hover ℹ️ for examples)
 2. **📝 Write Prompt**: Clearly state your task (hover ℹ️ for guidance)
 3. **🔍 Add Context**: Include constraints and background (hover ℹ️ for tips)
@@ -72,20 +74,20 @@ Hover over any ℹ️ icon for detailed guidance with examples!
 
 The app now includes a selection of pre-built prompts to help you get started. Find them in the "Examples" dropdown.
 
-### 1. **Technical Article Writer**
-- **Persona**: A senior software engineer writing a technical blog post.
-- **Prompt**: "Explain the concept of monorepos vs. multi-repos."
-- **Result**: A well-structured article with code examples.
+### 1. **Python Function Expert**
+- **Persona**: An expert in Python and data structures, specializing in writing clean, efficient, and well-documented code.
+- **Prompt**: "Create a Python function to find the second largest number in a list of integers."
+- **Result**: A well-structured function with code examples.
 
-### 2. **Creative Story Generator**
-- **Persona**: A fantasy author brainstorming ideas.
-- **Prompt**: "Write a short story about a dragon who is afraid of heights."
-- **Result**: A unique and engaging narrative.
+### 2. **Creative Writing Expert**
+- **Persona**: An expert writer, specializing in humor and satire.
+- **Prompt**: "Write a short story about ducks."
+- **Result**: A fun short story on topic.
 
-### 3. **API Documentation Assistant**
-- **Persona**: A technical writer creating API documentation.
-- **Prompt**: "Document the `/users/{id}` endpoint, including parameters and responses."
-- **Result**: Clear and concise documentation in Markdown format.
+### 3. **Financial Analyst Expert**
+- **Persona**: A certified financial analyst with 15 years of experience in portfolio risk assessment for retail clients.
+- **Prompt**: "Analyze the risk profile of the provided stock portfolio [x] and provide recommendations."
+- **Result**: A clear and concise summary risk analysis in Markdown format.
 
 ## 🤖 Supported AI Models
 
@@ -105,8 +107,7 @@ The app now includes a selection of pre-built prompts to help you get started. F
 
 ## 🛠️ Technology Stack
 
-- **Frontend**: React 19, Tailwind CSS, PWA-ready
-- **Backend**: Express.js with OpenRouter integration
+- **Frontend**: React 19, Tailwind CSS, PWA-ready, with OpenRouter integration
 - **Deployment**: Netlify-optimized with auto-deploy
 - **Storage**: Client-side API key storage (secure & private)
 
@@ -122,7 +123,7 @@ context-engineer/
 │   │   ├── components/     # React components
 │   │   └── App.js         # Main application
 │   └── package.json
-├── server/                # Express backend (for local dev)
+|
 ├── netlify.toml           # Netlify configuration
 └── README.md
 ```
